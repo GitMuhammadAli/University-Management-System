@@ -6,10 +6,10 @@ const Instructor = require('../models/instructorSchema');
 const Student = require('../models/studentSchema'); 
 
 
+
+
+
 exports.generateTimeSheet = async (studentId) => {
-
-
-
 try {
     
     const student = await Student.findById(studentId).exec();
@@ -27,7 +27,7 @@ try {
         const existingClasses = await TimeSheet.find({ Room: room._id, timeSlot });
         return existingClasses.length === 0;
       }
-  
+
       for (const timeSlot of timeSlots) {
         for (const room of rooms) {
           const isRoomAvailable = await isRoomAvailableForTimeSlot(room, timeSlot);
@@ -41,7 +41,9 @@ try {
               timeSlot: timeSlot,
               Course: randomCourse._id,
               instructor: randomInstructor._id,
+              student: studentId,  
             });
+            
   
             await timesheetEntry.save();
   
