@@ -7,15 +7,18 @@ const Student = require('../models/studentSchema');
 
 
 
-
-
-exports.generateTimeSheet = async (studentId) => {
+exports.generateTimeSheet = async (req, res ) => {
 try {
-    
+  const studentId = req.params.studentId;  
     const student = await Student.findById(studentId).exec();
 
     if (!student) {
-      return { error: 'Student not found' };
+      return res.status(500).json({ error: 'student not found ' });
+    }
+    const existingTimesheet = await TimeSheet.find({ student: studentId });
+
+    if (existingTimesheet.length > 0) {
+      return res.status(400).json({ error: 'Timetable already generated for the student'  });
     }
       const timesheet = [];
       const rooms = await Room.find({});
@@ -37,25 +40,23 @@ try {
   
 
             const timesheetEntry = new TimeSheet({
-              Room: room._id,
+              Room: room,
               timeSlot: timeSlot,
-              Course: randomCourse._id,
-              instructor: randomInstructor._id,
+              Course: randomCourse,
+              instructor: randomInstructor,
               student: studentId,  
             });
             
   
             await timesheetEntry.save();
-  
-            timesheet.push(timesheetEntry);
+
           }
         }
       }
   
-      return timesheet;
-    } catch (err) {
-      console.error(err);
-      throw err;
+       res.status(200).json({message:"Your time table ",timesheet});
+      } catch (err) {
+     return  res.status(500).json({ error: 'Failed to generate timesheet' });
     }
   };
   
@@ -63,3 +64,9 @@ try {
     return array[Math.floor(Math.random() * array.length)];
 }
   
+
+
+exports.updateTimesheet = async (req,res) => {
+
+
+}
