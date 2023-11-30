@@ -7,9 +7,6 @@ const Student = require('../models/studentSchema');
 
 
 exports.generateTimeSheet = async (studentId) => {
-
-
-
 try {
     
     const student = await Student.findById(studentId).exec();
@@ -37,15 +34,16 @@ try {
   
 
             const timesheetEntry = new TimeSheet({
-              Room: room._id,
+              Room: room,
               timeSlot: timeSlot,
-              Course: randomCourse._id,
-              instructor: randomInstructor._id,
+              Course: randomCourse,
+              instructor: randomInstructor,
             });
   
             await timesheetEntry.save();
   
             timesheet.push(timesheetEntry);
+            break;
           }
         }
       }
