@@ -4,6 +4,9 @@ const Course = require('../models/courseSchema');
 const Instructor = require('../models/instructorSchema');
 const Student = require('../models/studentSchema'); 
 const timeSheet = require('../models/timesheetSchema');
+const department = require('../models/departmentSchema');
+const university = require('../models/universitySchema');
+const classes = require('../models/classSchema');
 
 
 async function Counts(Model) {
@@ -26,6 +29,9 @@ instructorcount: await Counts(Instructor),
 coursecount: await Counts(Course),
 timeslotcount: await Counts(TimeSlot),
 roomcount: await Counts(Room),
+classescount: await Counts(classes),
+universitycount: await Counts(university),
+departmentcount: await Counts(department),
 }
 
 res.status(200).json(count);
