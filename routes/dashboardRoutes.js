@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const dashboardController = require('../controllers/dashboardController');
+const authenticateToken = require('../middleware/jwtmiddleware');
+const admin = require('../middleware/onlyAdmin');
 
-const dashboard = require('../controllers/dashboardController');
 
 
-router.get('/dashboard',dashboard.getAlldashboardCounts);
+router.get('/dashboard', authenticateToken, admin ,dashboardController.getAlldashboardCounts);
 
 module.exports = router;
