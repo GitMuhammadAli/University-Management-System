@@ -4,6 +4,7 @@ const studentSchema = new mongoose.Schema({
     Email: String,
     ContactInfo: {type :String, required: true},
   Department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department', required: true },
+  weeklyStudyHours: { type: Number, default: 0 },
     delete: { type: Boolean, default: false }
     
   });
