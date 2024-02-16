@@ -7,6 +7,7 @@ const timeSheet = require('../models/timesheetSchema');
 const department = require('../models/departmentSchema');
 const university = require('../models/universitySchema');
 const classes = require('../models/classSchema');
+const TryCatchAynsc = require('../middleware/TryCatchAysnc');
 
 async function Counts(Model) {
   try {
@@ -19,8 +20,7 @@ async function Counts(Model) {
 }
 
 module.exports = {
-  getAlldashboardCounts: async (req, res) => {
-    try {
+  getAlldashboardCounts: TryCatchAynsc (async (req, res) => {
         const count = {
           timesheetcount: await Counts(timeSheet),
           Studentcount: await Counts(Student),
@@ -33,9 +33,6 @@ module.exports = {
           departmentcount: await Counts(department),
         };
         res.status(200).json({ count });
-    }catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Error counting tables' });
-    }
-  },
+   
+  })
 };
