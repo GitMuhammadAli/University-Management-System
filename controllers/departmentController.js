@@ -1,5 +1,7 @@
 const Department = require("../models/departmentSchema"); 
 const TryCatchAynsc = require('../middleware/TryCatchAysnc');
+const pagelimit = require('../utils/pagelimit');
+
 
 exports.createDepartment = TryCatchAynsc(async (req, res) => {
     const department = new Department(req.body);
@@ -10,8 +12,9 @@ exports.createDepartment = TryCatchAynsc(async (req, res) => {
 
   exports.getAllDepartments = TryCatchAynsc( async (req, res) => {
     const departments = await Department.find().populate('University');
-    res.status(200).json({message:"Successfully retrieved all departments",departments});
- 
+    const {page,limit,skipp} = await pagelimit(req)
+    departments = await Department.find().skip(skipp).limit(limit).populate('University');
+    res.status(200).json({message:"Successfully retrieved all departments",departments , departmentsCount: departments.length});
 });
 
 exports.getDepartmentById = TryCatchAynsc(async (req, res) => {

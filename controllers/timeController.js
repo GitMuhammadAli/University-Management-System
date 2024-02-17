@@ -1,6 +1,6 @@
 const TimeSlot = require('../models/timeSlotSchema');
 const TryCatchAynsc = require('../middleware/TryCatchAysnc');
-
+const pagelimit =  require('../utils/pagelimit');
 
 exports.createTimeSlot = TryCatchAynsc(async (req, res) => {
  
@@ -13,7 +13,9 @@ exports.createTimeSlot = TryCatchAynsc(async (req, res) => {
 exports.getAllTimeSlots = TryCatchAynsc(async (req, res) => {
  
     const timeSlots = await TimeSlot.find();
-    res.status(200).json({ message: "ALL Time slots Retrived successfully" ,timeSlots});
+    const { page, limit , skip } = await pagelimit(req);
+    timeSlots = await TimeSlot.find().skip(skip).limit(limit);
+    res.status(200).json({ message: "ALL Time slots Retrived successfully" ,timeSlots ,  timeslotsCounts: timeSlots.length});
  
 });
 

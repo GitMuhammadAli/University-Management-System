@@ -1,6 +1,6 @@
 const Room = require('../models/roomSchema');
 const TryCatchAynsc = require('../middleware/TryCatchAysnc');
-
+const pagelimit = require('../utils/pagelimit');
 
 exports.createRoom = TryCatchAynsc( async (req, res) => {
   
@@ -14,7 +14,9 @@ exports.createRoom = TryCatchAynsc( async (req, res) => {
 exports.getAllRooms = TryCatchAynsc(async (req, res) => {
   
     const rooms = await Room.find();
-    res.status(200).json({message : "Successfully Retrived all Rooms",rooms});
+    const { page, limit , skip } = await pagelimit(req);
+    rooms = await Room.find().skip(skip).limit(limit);
+    res.status(200).json({message : "Successfully Retrived all Rooms",rooms , roomscount: rooms.length});
   
 });
 

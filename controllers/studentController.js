@@ -1,5 +1,6 @@
 const Student = require("../models/studentSchema"); 
 const TryCatchAynsc = require('../middleware/TryCatchAysnc');
+const pagelimit = require('../utils/pagelimit');
 
 exports.createStudent = TryCatchAynsc(async (req, res) => {
   
@@ -11,8 +12,11 @@ exports.createStudent = TryCatchAynsc(async (req, res) => {
 
 exports.getAllStudents = TryCatchAynsc(async (req, res) => {
   
+
     const students = await Student.find().populate('Department');
-    res.status(200).json({message:"Successfully retrived all Students",students});
+  const { page ,  limit , skip} = await pagelimit(req);
+    students = await Student.find().skip(skip).limit(limit).populate('Department');
+    res.status(200).json({message:"Successfully retrived all Students",students ,  studentsCount : students.length});
   
 });
 
