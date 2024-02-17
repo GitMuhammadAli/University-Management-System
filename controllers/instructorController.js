@@ -1,6 +1,6 @@
 const Instructor = require("../models/instructorSchema");
 const TryCatchAynsc = require('../middleware/TryCatchAysnc');
-
+const pagelimit = require('../utils/pagelimit');
 
 exports.createInstructor = TryCatchAynsc( async (req, res) => {
       const instructor = new Instructor(req.body);
@@ -13,7 +13,9 @@ exports.createInstructor = TryCatchAynsc( async (req, res) => {
   exports.getAllInstructors = TryCatchAynsc(async (req, res) => {
     
       const instructors = await Instructor.find().populate('Department');
-      res.status(200).json({message:"Successfully retrived all Instructor data ",instructors});
+      const {page , skip, limit } = await pagelimit(req);
+      instructors = await Instructor.find().skip(skip).limit(limit).populate('Department');
+      res.status(200).json({message:"Successfully retrived all Instructor data ",instructors , instructorsCount: instructors.length} );
     
   });
   

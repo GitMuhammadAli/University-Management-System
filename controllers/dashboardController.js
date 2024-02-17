@@ -8,7 +8,7 @@ const department = require('../models/departmentSchema');
 const university = require('../models/universitySchema');
 const classes = require('../models/classSchema');
 const TryCatchAynsc = require('../middleware/TryCatchAysnc');
-
+const pagelimit = require('../utils/pagelimit');
 async function Counts(Model) {
   try {
     const count = await Model.countDocuments();

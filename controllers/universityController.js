@@ -1,6 +1,6 @@
 const University = require("../models/universitySchema");
 const TryCatchAynsc = require('../middleware/TryCatchAysnc');
-
+const pagelimit = require('../utils/pagelimit');
 
 exports.createUniversity = TryCatchAynsc(async (req, res) => {
   
@@ -13,6 +13,7 @@ exports.createUniversity = TryCatchAynsc(async (req, res) => {
 exports.getdata = TryCatchAynsc(async (req, res) => {
 
     const universities = await University.find()
+    const {page,limit,skip} = await pagelimit(req)
     res.status(200).json({message:"Successfully retrived all data",universities});
  
 });
